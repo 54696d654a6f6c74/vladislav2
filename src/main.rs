@@ -17,9 +17,7 @@ fn main() {
     
     for chunk in chunks {
         thread::spawn(|| {
-            writer::write(&chunk, &settings.output_dir);
+            writer::write(&chunk, &settings.output_dir)
         });
     }
-
-    //writer::write(targets, settings.output_dir);
 }
