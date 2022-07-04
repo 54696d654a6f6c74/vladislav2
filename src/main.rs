@@ -1,3 +1,4 @@
+use std::thread;
 use walkdir::{DirEntry};
 
 mod settings;
@@ -12,5 +13,13 @@ fn main() {
 
     let targets: Vec<DirEntry> = walker::walk(&settings);
 
-    writer::write(targets, settings.output_dir);
+    let chunks = targets.chunks(2);
+    
+    for chunk in chunks {
+        thread::spawn(|| {
+            writer::write(&chunk, &settings.output_dir);
+        });
+    }
+
+    //writer::write(targets, settings.output_dir);
 }

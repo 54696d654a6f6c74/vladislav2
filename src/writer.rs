@@ -26,7 +26,7 @@ fn write_file(path: &String, content: &String) {
     target.unwrap().write(content.as_bytes()).unwrap();
 }
 
-pub fn write(targets: Vec<DirEntry>, out_path: String) {
+pub fn write(targets: &[DirEntry], out_path: &String) {
     for target in targets {
         if let Some(target_path) = target.path().to_str(){
             let processed = unfold(target_path).unwrap();
