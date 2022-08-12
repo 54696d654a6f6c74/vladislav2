@@ -3,7 +3,7 @@ use serde_json::Result;
 use std::fs::OpenOptions;
 use std::io::prelude::*;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Settings {
     pub file_ext: String,
     pub output_dir: String,

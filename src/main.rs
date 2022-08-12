@@ -13,11 +13,17 @@ fn main() {
 
     let targets: Vec<DirEntry> = walker::walk(&settings);
 
-    let chunks = targets.chunks(2);
-    
-    for chunk in chunks {
-        thread::spawn(|| {
-            writer::write(&chunk, &settings.output_dir)
-        });
+    let mut groups = vec![];
+
+    for chunk in targets.chunks(2) {
+        groups.push(chunk.to_owned());
     }
+
+    for chunk in groups {
+        let output_dir = settings.output_dir.clone();
+        thread::spawn(move || {
+            writer::write(&chunk, &output_dir);
+            chunk
+        });
+    };
 }
