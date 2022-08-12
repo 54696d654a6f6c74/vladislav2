@@ -4,7 +4,7 @@ A rewrite of my original [vladislav](https://github.com/54696d654a6f6c74/vladisl
 
 # Usage
 ### Getting started
-A blank run of the `driver.py` file will generate a `vlad_settings.json` file than can be edited to configure Vladislav.
+A blank run of the program will generate a `vlad_settings.json` file than can be edited to configure Vladislav.
 
 ### The features
 By default Vladislav looks for `.vlad` files to process and output into the `vlad_out` folder.
@@ -43,7 +43,7 @@ index.vlad
 </html>
 ```
 
-Run `python driver.py` and you get:
+Running the programram will result in:
 
 vlad_out/index.html
 ```html
@@ -80,7 +80,8 @@ index.vlad
 </html>
 ```
 
-Run `python driver.py` and you get:
+Running the programram will result in:
+
 ```html
 <html>
 <head>
