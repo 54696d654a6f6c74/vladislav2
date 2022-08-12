@@ -8,6 +8,7 @@ pub struct Settings {
     pub file_ext: String,
     pub output_dir: String,
     pub output_ext: String,
+    pub files_per_thread: u16,
     pub except_path: Option<Vec<String>>,
     pub except_dir: Option<Vec<String>>,
     pub except_filename: Option<Vec<String>>
@@ -54,6 +55,7 @@ impl Default for Settings {
             file_ext: String::from("vlad"),
             output_dir: String::from("./vlad_out"),
             output_ext: String::from("html"),
+            files_per_thread: 15,
             except_dir: Some(vec![String::from("templates")]),
             except_path: Some(vec!()),
             except_filename: Some(vec!())
