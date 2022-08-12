@@ -1,5 +1,5 @@
 # What is Vladislav2?
-A fast, lightweight and configurable html preprocessor inspired by [Sergey](https://sergey.cool/).
+A fast, lightweight and configurable, multi-threaded html preprocessor inspired by [Sergey](https://sergey.cool/).
 A rewrite of my original [vladislav](https://github.com/54696d654a6f6c74/vladislav) in Rust.
 
 # Usage
