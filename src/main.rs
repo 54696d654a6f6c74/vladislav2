@@ -1,8 +1,8 @@
 use std::thread;
-use walkdir::{DirEntry};
+use walkdir::DirEntry;
 
-mod settings;
 mod processor;
+mod settings;
 mod walker;
 mod writer;
 
@@ -25,5 +25,5 @@ fn main() {
             writer::write(&chunk, &output_dir);
             chunk
         });
-    };
+    }
 }

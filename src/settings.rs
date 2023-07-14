@@ -11,7 +11,7 @@ pub struct Settings {
     pub files_per_thread: u16,
     pub except_path: Option<Vec<String>>,
     pub except_dir: Option<Vec<String>>,
-    pub except_filename: Option<Vec<String>>
+    pub except_filename: Option<Vec<String>>,
 }
 
 impl Settings {
@@ -24,23 +24,21 @@ impl Settings {
     }
 
     pub fn load_settings(path: &str) -> Settings {
-        let mut target = match OpenOptions::new()
-            .read(true)
-            .open(path) {
-                Err(_) => {
-                    let mut target = OpenOptions::new()
-                        .write(true)
-                        .create(true)
-                        .open(path)
-                        .unwrap();
-                    let content = Settings::default().stringified().unwrap();
+        let mut target = match OpenOptions::new().read(true).open(path) {
+            Err(_) => {
+                let mut target = OpenOptions::new()
+                    .write(true)
+                    .create(true)
+                    .open(path)
+                    .unwrap();
+                let content = Settings::default().stringified().unwrap();
 
-                    target.write(&content.as_bytes()).unwrap();
+                target.write(&content.as_bytes()).unwrap();
 
-                    return Settings::default();
-                }
-                Ok(val) => val
-            };
+                return Settings::default();
+            }
+            Ok(val) => val,
+        };
 
         let mut settings_read = String::new();
         target.read_to_string(&mut settings_read).unwrap(); // We want to panic on failure here
@@ -57,8 +55,8 @@ impl Default for Settings {
             output_ext: String::from("html"),
             files_per_thread: 15,
             except_dir: Some(vec![String::from("templates")]),
-            except_path: Some(vec!()),
-            except_filename: Some(vec!())
+            except_path: Some(vec![]),
+            except_filename: Some(vec![]),
         }
     }
 }

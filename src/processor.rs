@@ -1,7 +1,7 @@
-use std::fs::OpenOptions;
-use std::fs::File;
-use std::io::prelude::*;
 use regex::Regex;
+use std::fs::File;
+use std::fs::OpenOptions;
+use std::io::prelude::*;
 
 pub fn unfold(file_path: &str) -> std::io::Result<String> {
     let rx = Regex::new(r"<!--\s?include(\s\-\w+)?\s+([^\s]*)\s?-->").unwrap();
@@ -15,7 +15,7 @@ pub fn unfold(file_path: &str) -> std::io::Result<String> {
         panic!("{}", err);
     }
 
-    for include_line in rx.captures(&content) {
+    while let Some(include_line) = rx.captures(&content) {
         if let Some(line) = include_line.get(0) {
             html += &content[progress..line.start()];
             progress = line.start() + line.as_str().len();
@@ -38,7 +38,7 @@ pub fn unfold(file_path: &str) -> std::io::Result<String> {
                 html += &template;
             };
         }
-    };
+    }
 
     html += &content[progress..];
 
