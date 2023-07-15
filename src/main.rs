@@ -19,11 +19,19 @@ fn main() {
         groups.push(chunk.to_owned());
     }
 
+    let mut threads = vec![];
+
     for chunk in groups {
         let output_dir = settings.output_dir.clone();
-        thread::spawn(move || {
+        let handle = thread::spawn(move || {
             writer::write(&chunk, &output_dir);
             chunk
         });
+
+        threads.push(handle);
+    }
+
+    for handle in threads {
+        handle.join().unwrap();
     }
 }
