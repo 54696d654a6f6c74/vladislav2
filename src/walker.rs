@@ -2,9 +2,10 @@ use crate::settings::Settings;
 use std::path::Path;
 use walkdir::{DirEntry, WalkDir};
 
-fn is_excluded(e: &DirEntry, ex: &Settings) -> bool {
-    if ex.except_dir.as_ref().unwrap().contains(
-        &e.path()
+fn is_excluded(file: &DirEntry, settings: &Settings) -> bool {
+    if settings.except_dir.as_ref().unwrap().contains(
+        &file
+            .path()
             .parent()
             .unwrap_or(Path::new(""))
             .to_str()
@@ -13,19 +14,19 @@ fn is_excluded(e: &DirEntry, ex: &Settings) -> bool {
     ) {
         return true;
     }
-    if ex
+    if settings
         .except_path
         .as_ref()
         .unwrap()
-        .contains(&e.path().to_str().unwrap().to_string())
+        .contains(&file.path().to_str().unwrap().to_string())
     {
         return true;
     }
-    if ex
+    if settings
         .except_filename
         .as_ref()
         .unwrap()
-        .contains(&e.file_name().to_str().unwrap_or_default().to_string())
+        .contains(&file.file_name().to_str().unwrap_or_default().to_string())
     {
         return true;
     }
@@ -33,20 +34,22 @@ fn is_excluded(e: &DirEntry, ex: &Settings) -> bool {
     false
 }
 
-fn is_included(e: &DirEntry, inc: &Settings) -> bool {
-    e.file_type().is_file()
-        && inc.file_ext
-            == e.file_name()
-                .to_str()
-                .unwrap_or_default()
-                .split('.')
-                .by_ref()
-                .last()
-                .unwrap()
+fn is_eligible(file: &DirEntry, settings: &Settings) -> bool {
+    fn get_file_ext(file: &DirEntry) -> &str {
+        file.file_name()
+            .to_str()
+            .unwrap_or_default()
+            .split('.')
+            .by_ref()
+            .last()
+            .unwrap_or_default()
+    }
+
+    file.file_type().is_file() && settings.file_ext == get_file_ext(file)
 }
 
-fn is_hidden(e: &DirEntry) -> bool {
-    e.path()
+fn is_hidden(file: &DirEntry) -> bool {
+    file.path()
         .file_name()
         .unwrap_or_default()
         .to_str()
@@ -66,7 +69,7 @@ pub fn walk(settings: &Settings) -> Vec<DirEntry> {
         };
 
         if !is_hidden(&entry) && !is_excluded(&entry, &settings) {
-            if entry.file_type().is_file() && is_included(&entry, &settings) {
+            if is_eligible(&entry, &settings) {
                 targets.push(entry);
             }
         }
