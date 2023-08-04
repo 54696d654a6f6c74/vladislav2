@@ -16,7 +16,7 @@ fn needs_writing(path: &String, check_against: &String) -> bool {
                 );
             };
 
-            check_against == &content
+            !check_against.eq(&content)
         }
         Err(err) => {
             if err.kind() == ErrorKind::NotFound {
@@ -37,13 +37,16 @@ fn write_file(path: &String, content: &String) {
     target.unwrap().write(content.as_bytes()).unwrap();
 }
 
-pub fn write(targets: &[DirEntry], out_path: &String) {
+pub fn write(targets: &[DirEntry], out_path: &String, out_ext: &String) {
     for target in targets {
         if let Some(target_path) = target.path().to_str() {
             let processed = unfold(target_path).unwrap();
 
-            let out_path =
-                out_path.clone() + "/" + target.path().file_name().unwrap().to_str().unwrap();
+            let out_path = out_path.clone()
+                + "/"
+                + target.path().file_stem().unwrap().to_str().unwrap()
+                + "."
+                + out_ext;
 
             if needs_writing(&out_path, &processed) {
                 write_file(&out_path, &processed);
