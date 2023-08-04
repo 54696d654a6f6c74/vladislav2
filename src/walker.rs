@@ -1,18 +1,15 @@
 use crate::settings::Settings;
-use std::path::Path;
 use walkdir::{DirEntry, WalkDir};
 
 fn is_excluded(file: &DirEntry, settings: &Settings) -> bool {
-    if settings.except_dir.as_ref().unwrap().contains(
-        &file
-            .path()
-            .parent()
-            .unwrap_or(Path::new(""))
-            .to_str()
-            .unwrap()
-            .to_string(),
-    ) {
-        return true;
+    if let Some(except_dir) = settings.except_dir.as_ref() {
+        let path_components = file.path().components();
+
+        for component in path_components {
+            if except_dir.contains(&String::from(component.as_os_str().to_str().unwrap_or(""))) {
+                return true;
+            }
+        }
     }
     if settings
         .except_path
@@ -31,7 +28,7 @@ fn is_excluded(file: &DirEntry, settings: &Settings) -> bool {
         return true;
     }
 
-    false
+    return false;
 }
 
 fn is_eligible(file: &DirEntry, settings: &Settings) -> bool {
@@ -45,7 +42,7 @@ fn is_eligible(file: &DirEntry, settings: &Settings) -> bool {
             .unwrap_or_default()
     }
 
-    file.file_type().is_file() && settings.file_ext == get_file_ext(file)
+    file.file_type().is_file() && settings.file_ext.eq(get_file_ext(file))
 }
 
 fn is_hidden(file: &DirEntry) -> bool {

@@ -23,8 +23,9 @@ fn main() {
 
     for chunk in groups {
         let output_dir = settings.output_dir.clone();
+        let output_ext = settings.output_ext.clone();
         let handle = thread::spawn(move || {
-            writer::write(&chunk, &output_dir);
+            writer::write(&chunk, &output_dir, &output_ext);
             chunk
         });
 

@@ -18,7 +18,7 @@ pub fn unfold(file_path: &str) -> std::io::Result<String> {
     for capture in rx.captures_iter(&content) {
         if let Some(include_line) = capture.get(0) {
             html += &content[progress..include_line.start()];
-            progress = include_line.start() + include_line.as_str().len();
+            progress = include_line.end();
         }
 
         let path = &capture["path"];
