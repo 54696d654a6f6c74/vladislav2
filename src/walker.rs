@@ -50,7 +50,7 @@ fn is_hidden(file: &DirEntry) -> bool {
         .file_name()
         .unwrap_or_default()
         .to_str()
-        .map(|s| s.starts_with("."))
+        .map(|s| s.starts_with('.'))
         .unwrap_or(false)
 }
 
@@ -65,10 +65,8 @@ pub fn walk(settings: &Settings) -> Vec<DirEntry> {
             Some(Ok(e)) => e,
         };
 
-        if !is_hidden(&entry) && !is_excluded(&entry, &settings) {
-            if is_eligible(&entry, &settings) {
-                targets.push(entry);
-            }
+        if !is_hidden(&entry) && !is_excluded(&entry, settings) && is_eligible(&entry, settings) {
+            targets.push(entry);
         }
     }
 }

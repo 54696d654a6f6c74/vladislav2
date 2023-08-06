@@ -25,10 +25,10 @@ fn main() {
     spawn_threads(&groups, &settings);
 }
 
-fn spawn_threads(groups: &Vec<Vec<DirEntry>>, settings: &Settings) {
+fn spawn_threads(groups: &[Vec<DirEntry>], settings: &Settings) {
     return thread::scope(|s| {
         for chunk in groups.iter() {
-            s.spawn(move || writer::write(&chunk, settings));
+            s.spawn(move || writer::write(chunk, settings));
         }
     });
 }
