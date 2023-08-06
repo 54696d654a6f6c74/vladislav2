@@ -18,7 +18,7 @@ fn main() {
 
     let mut groups = vec![];
 
-    for chunk in targets.chunks(thread_count) {
+    for chunk in targets.chunks(if thread_count > 0 { thread_count } else { 1 }) {
         groups.push(chunk.to_owned());
     }
 
