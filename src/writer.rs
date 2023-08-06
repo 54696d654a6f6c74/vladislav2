@@ -6,7 +6,7 @@ use std::io::ErrorKind;
 use walkdir::DirEntry;
 
 fn needs_writing(path: &String, check_against: &String) -> bool {
-    match OpenOptions::new().read(true).open(&path) {
+    match OpenOptions::new().read(true).open(path) {
         Ok(mut target) => {
             let mut content = String::new();
 
@@ -20,11 +20,7 @@ fn needs_writing(path: &String, check_against: &String) -> bool {
             !check_against.eq(&content)
         }
         Err(err) => {
-            if err.kind() == ErrorKind::NotFound {
-                true
-            } else {
-                false
-            }
+            return err.kind() == ErrorKind::NotFound;
         }
     }
 }
@@ -34,20 +30,16 @@ fn write_file(path: &String, content: &String) {
         .truncate(true)
         .create(true)
         .write(true)
-        .open(&path);
-    target.unwrap().write(content.as_bytes()).unwrap();
+        .open(path);
+    target.unwrap().write_all(content.as_bytes()).unwrap();
 }
 
 pub fn write(targets: &[DirEntry], settings: &Settings) {
     for target in targets {
         if let Some(target_path) = target.path().to_str() {
-            let processed = unfold(target_path).unwrap();
+            let processed = unfold(target_path, &settings.root_override).unwrap();
 
             let mut out_path = String::new();
-
-            if let Some(root_override) = &settings.root_override {
-                out_path.push_str(&root_override);
-            };
 
             out_path.push_str(&settings.output_dir);
             out_path.push('/');

@@ -34,7 +34,7 @@ impl Settings {
                     .unwrap();
                 let content = Settings::default().stringified().unwrap();
 
-                target.write(&content.as_bytes()).unwrap();
+                target.write_all(content.as_bytes()).unwrap();
 
                 return Settings::default();
             }
