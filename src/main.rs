@@ -1,4 +1,5 @@
-use std::thread;
+use settings::Settings;
+use std::thread::{self};
 use walkdir::DirEntry;
 
 mod processor;
@@ -13,26 +14,21 @@ fn main() {
 
     let targets: Vec<DirEntry> = walker::walk(&settings);
 
+    let thread_count = targets.len() / settings.files_per_thread as usize;
+
     let mut groups = vec![];
 
-    for chunk in targets.chunks(2) {
+    for chunk in targets.chunks(thread_count) {
         groups.push(chunk.to_owned());
     }
 
-    let mut threads = vec![];
+    spawn_threads(&groups, &settings);
+}
 
-    for chunk in groups {
-        let output_dir = settings.output_dir.clone();
-        let output_ext = settings.output_ext.clone();
-        let handle = thread::spawn(move || {
-            writer::write(&chunk, &output_dir, &output_ext);
-            chunk
-        });
-
-        threads.push(handle);
-    }
-
-    for handle in threads {
-        handle.join().unwrap();
-    }
+fn spawn_threads(groups: &Vec<Vec<DirEntry>>, settings: &Settings) {
+    return thread::scope(|s| {
+        for chunk in groups.iter() {
+            s.spawn(move || writer::write(&chunk, settings));
+        }
+    });
 }

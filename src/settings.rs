@@ -9,6 +9,7 @@ pub struct Settings {
     pub output_dir: String,
     pub output_ext: String,
     pub files_per_thread: u16,
+    pub root_override: Option<String>,
     pub except_path: Option<Vec<String>>,
     pub except_dir: Option<Vec<String>>,
     pub except_filename: Option<Vec<String>>,
@@ -57,6 +58,7 @@ impl Default for Settings {
             except_dir: Some(vec![String::from("templates")]),
             except_path: Some(vec![]),
             except_filename: Some(vec![]),
+            root_override: None,
         }
     }
 }
