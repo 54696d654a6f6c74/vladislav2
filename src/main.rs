@@ -1,3 +1,6 @@
+#![deny(clippy::implicit_return)]
+#![allow(clippy::needless_return)]
+
 use settings::Settings;
 use std::thread::{self};
 use walkdir::DirEntry;
