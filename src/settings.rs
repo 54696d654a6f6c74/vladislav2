@@ -17,11 +17,11 @@ pub struct Settings {
 
 impl Settings {
     pub fn new(data: &str) -> Result<Self> {
-        Ok(serde_json::from_str(data)?)
+        return serde_json::from_str(data);
     }
 
     fn stringified(&self) -> Result<String> {
-        serde_json::to_string_pretty(self)
+        return serde_json::to_string_pretty(self);
     }
 
     pub fn load_settings(path: &str) -> Settings {
@@ -44,13 +44,13 @@ impl Settings {
         let mut settings_read = String::new();
         target.read_to_string(&mut settings_read).unwrap(); // We want to panic on failure here
 
-        Settings::new(&settings_read).unwrap() // Similarly, we're OK to panic here
+        return Settings::new(&settings_read).unwrap(); // Similarly, we're OK to panic here
     }
 }
 
 impl Default for Settings {
     fn default() -> Self {
-        Settings {
+        return Settings {
             file_ext: String::from("vlad"),
             output_dir: String::from("./vlad_out"),
             output_ext: String::from("html"),
@@ -59,6 +59,6 @@ impl Default for Settings {
             except_path: Some(vec![]),
             except_filename: Some(vec![]),
             root_override: None,
-        }
+        };
     }
 }

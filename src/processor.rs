@@ -40,7 +40,7 @@ pub fn unfold(file_path: &str, root_override: &Option<String>) -> std::io::Resul
 
     html += &content[progress..];
 
-    Ok(html)
+    return Ok(html);
 }
 
 fn get_path(path: &str, root_override: &Option<String>) -> String {

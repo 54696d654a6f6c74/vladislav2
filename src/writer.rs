@@ -17,7 +17,7 @@ fn needs_writing(path: &String, check_against: &String) -> bool {
                 );
             };
 
-            !check_against.eq(&content)
+            return !check_against.eq(&content);
         }
         Err(err) => {
             return err.kind() == ErrorKind::NotFound;
